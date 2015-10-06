@@ -5,8 +5,8 @@
 This document can be built using [Markdoc](http://markdoc.org/).
 
     :::bash
-    $ cd path/to/ombuds-spec
     $ pip install Markdoc
+    $ cd path/to/ombuds-spec
     $ markdoc build
     $ markdoc serve
 
