@@ -1,2 +1,14 @@
+# Metadata
+wiki-name: "Ombuds Technical Specification"
+
+# Directories
+wiki-dir: "doc"
+static-dir: "static"
+html-dir: "_html"
+
+# Rendering
 markdown:
-  extensions: [def_list]
+    extensions: [def_list]
+
+
+
