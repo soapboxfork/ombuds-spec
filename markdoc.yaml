@@ -1,1 +1,2 @@
-{}
+markdown:
+  extensions: [def_list]
