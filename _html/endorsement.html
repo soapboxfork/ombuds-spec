@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  
+  <head>
+    
+    
+      
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+      
+      
+      <title>
+        Ombuds Technical Specification » 
+        endorsments
+      </title>
+      
+      
+        <!-- YUI CSS reset, fonts, base -->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.0.0/build/cssreset/reset-min.css&amp;3.0.0/build/cssfonts/fonts-min.css&amp;3.0.0/build/cssbase/base-min.css" media="screen, projection" />
+        
+        <link rel="stylesheet" type="text/css" href="media/css/style.css" media="screen, projection" />
+        <link rel="stylesheet" type="text/css" href="media/css/pygments.css" media="screen, projection" />
+      
+      
+      
+      
+      
+        
+      
+    
+  </head>
+  
+  <body >
+    
+      
+      
+        
+          
+  
+    <ol id="breadcrumbs">
+      
+        <li class="crumb-0 not-last">
+          
+            <a href="./">index</a>
+          
+        </li>
+      
+        <li class="crumb-1 last">
+          
+            endorsement
+          
+        </li>
+      
+    </ol> <!-- ol#breadcrumbs -->
+  
+
+        
+      
+      
+      <div id="content">
+        
+        
+        
+        <!-- title: endorsments -->
+
+<h2>Endorsement Specification</h2>
+<h1>Overview</h1>
+<p>An endorsement is a type of message that can be encododed in a Bitcoin transaction.
+The goal of an endorsement is to provide a low cost, permanent way for organizations and individuals to publicly signal to the network that bulletin satisfies their criterea for endorsement. 
+By providing an open mechanism for people to express approval of specific bulletins, more meaningful interactions can occur through Ombuds.</p>
+<p>An example of this would be auditing a system that produces backups of politically sensitive tweets.
+Multiple third parties could automatically validate that a tweet was accurately stored in the public record as a bulletin and endorse that bulletin.
+This would provide a strong layer of audits that established that a tweet was created on Twitter at some point in the past.</p>
+<p>Another use case is the aggregation of quality sources and material by news agencies interested in collecting digital ground truth.</p>
+<p>What an endorsement really means is defined by the creator of the endorsement. 
+Webster's dictionary gives us three definitions of the word 'endorsement'. </p>
+<pre><code>Endorsment (noun)
+: a public or official statement of support or approval
+
+: the act of publicly saying that you like or use a product or service 
+in exchange for money
+
+: the act or result of writing your name on the back of a check
+</code></pre>
+<p>All of the definitions or none of them can apply to an endoresment stored in the public record.</p>
+<h1>Contents</h1>
+<ol>
+<li>Specification</li>
+<li>Public Record Schema</li>
+<li>JSON Schema</li>
+</ol>
+<h1>Specification</h1>
+<p>An endorsement is defined as a Bitcoin transaction which contains the following protocol buffer in a data carrying output.</p>
+<pre><code>message endorsment {
+    required bytes txid         = 1; // A 32 byte SHA hash
+    required int64 timestamp    = 2; // Seconds since 00:00:00 Jan 1, 1970
+}
+</code></pre>
+<p>This buffer is encoded according to version 1.5.1 of Google's protocol buffer specification.
+It is prefixed with the 4 byte indicator that informs parsers that the following message is a Ombuds data-type.
+An example of the total payload encoded in hex follows this format:</p>
+<pre><code>                  head |        protocol buffer   |
+payload byte[] := 0xBEEF843F6724A347297987CD232304D
+                         |        txid          | ts
+</code></pre>
+<p>An endorsement can either be encoded in transactions in several ways.
+Parsers will look in the valid encoding formats as described in <a href="DD1">section 2.7.3 data encoding formats of DD01</a>.
+Since endorsements are less than 40 bytes in size, the reference implementation will place endorsements in OP_RETURN outputs.</p>
+<h1>Public Record Schema</h1>
+<p>An endorsement will be stored in the public record alongside bulletins by full nodes maintaining copies of the public record.
+The SQL schema is the same as the protocol buffer format except for one notable addition.
+An author field is included which is the Bitcoin address of the transactions first signing input as described in <a href="DD01">section 1.4 author key formats of DD01</a></p>
+<pre><code>CREATE TABLE endorsements (
+    txid        TEXT, -- the enclosing transactions SHA hash
+    bid         TEXT, -- the endorsed bulletins SHA hash
+    timestamp   INT,  -- Unix time
+    author      TEXT, -- formatted as a bitcoin address.
+
+    FORIEGN KEY(bid) REFERENCES bulletins(txid),
+    PRIMARY KEY(txid)
+);
+</code></pre>
+<p><a href="https://github.com/soapboxsys/ombudslib/blob/master/protocol/schema.sql">Source</a></p>
+<h1>JSON Schema</h1>
+<p>The JSON schema of an endorsement follows the same conventions laid out by the JSON format for bulletins.
+An example endorsement returned by a JSON API looks like this.</p>
+<pre><code>{
+    txid:      "c9be2cbeb2da2dfe1f0158246938a3899f4e5c5108ea54e75c7c4f22580e42bc",
+    bid:       "17756d6259242add26f728b8feb8f4b83a8c5af39d923b65f5ab6c0b27223d14",
+    author:    "mkzkHkLn1Q5fRuNh2wbg3V7BjX4cKXQHYE",
+    timestamp: 1444074578
+}
+</code></pre>
+        
+        
+        
+        
+        <hr class="clear" />
+      </div> <!-- div#content -->
+      
+      
+      <div id="footer">
+        <p>
+          
+            Ombuds Technical Specification —
+          
+          Powered by <a href="http://markdoc.org/">Markdoc</a>.
+        </p>
+      </div>
+      
+    
+    
+    
+    <hr class="clear" />
+  </body>
+</html>

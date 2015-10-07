@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  
+  <head>
+    
+    
+      
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+      
+      
+      <title>
+        Ombuds Technical Specification » 
+        Web Relay Spec
+      </title>
+      
+      
+        <!-- YUI CSS reset, fonts, base -->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.0.0/build/cssreset/reset-min.css&amp;3.0.0/build/cssfonts/fonts-min.css&amp;3.0.0/build/cssbase/base-min.css" media="screen, projection" />
+        
+        <link rel="stylesheet" type="text/css" href="media/css/style.css" media="screen, projection" />
+        <link rel="stylesheet" type="text/css" href="media/css/pygments.css" media="screen, projection" />
+      
+      
+      
+      
+      
+        
+      
+    
+  </head>
+  
+  <body >
+    
+      
+      
+        
+          
+  
+    <ol id="breadcrumbs">
+      
+        <li class="crumb-0 not-last">
+          
+            <a href="./">index</a>
+          
+        </li>
+      
+        <li class="crumb-1 last">
+          
+            web-relay-api
+          
+        </li>
+      
+    </ol> <!-- ol#breadcrumbs -->
+  
+
+        
+      
+      
+      <div id="content">
+        
+        
+        
+        <!-- title: Web Relay Spec -->
+
+<h2>Web Relay API Design Description</h2>
+<h1>Overview</h1>
+<p>The goal of this document is to describe the intention behind and the details of a JSON API that exposes the public record over HTTP.
+This document will cover the specific requirements of an open-source API that serves public statements stored in Bitcoin's block chain.
+How this software is intended to be used and how it must function is covered within.</p>
+<h1>Status of This Document</h1>
+<p>This is a draft design that is subject to change. Further documentation of the API methods themselves can be found in the source code <a href="https://github.com/soapboxsys/ombudslib">here</a>.</p>
+<p>Nick -- October 2015</p>
+<h1>Contents</h1>
+<pre><code>1. Definitions
+1. Introduction
+2. Requirements Overview
+3. Available Records
+3. Physical Infrastructure 
+   1. Minimum Requirements
+   2. Deployment Process
+4. Authenticating the Server
+5. Protecting Users
+    1. Server Logging
+    2. TOR hidden services
+6. DOS Resistance Tradeoffs
+7. Release Process and Updates
+</code></pre>
+<h2>Definitions</h2>
+<p>Throughout this document the pronoun "we" is occasionally used. "We" in this context means Alex Kuck and Nick Skelsey.</p>
+<h2>Introduction</h2>
+<p>The API discussed here is the interface that mobile application and web based users of Ombuds will rely on for information stored in the public record.
+While it is clear that operator's of APIs and web servers can act maliciously, for the sake of usability and scalability we have decided to build a centralized piece of core infrastructure. </p>
+<p>The goal here is to produce a compact and performant JSON API that is easy for many organizations and individuals to deploy. 
+That being said, the first organization to deploy it will be Soapbox Systems.
+Due to size of Bitcoin's block chain we cannot expect new participants in this system to fully join the Bitcoin network, just to have access to Ombuds.
+To make our system more accessible, clients that cannot or would rather not bear the cost of deploying and maintaining there own network infrastructure can instead trust a third party to serve them relevant application data.</p>
+<p>It is important to note, that the API discussed below is READ only. The only interactions with the system that are conducted through the API is the retireval of records stored in the public record. 
+An SSV client can always verify that the statement is unmoddified and actually included in the record. 
+However, an SSV client can not be sure of whether or not statements have been excluded from the record.
+This problem along with methods to address it is discussed further in <a href="An-Auditable-API">DD02</a>.</p>
+<h2>Requirements Overview</h2>
+<p>In general the goal of this server application is that it runs on modern enterprise grade servers.
+To that end it must support thousands of simulataneous clients while remaining:</p>
+<ol>
+<li>Secure</li>
+<li>Available</li>
+<li>Performant</li>
+<li>Auditable</li>
+</ol>
+<p><code>0. Secure</code></p>
+<p>Clearly, the API code must not introduce any remote code execution vulnerabilities or unintentional leaks of user or operator information.
+The API server must also be resitant to DOS attacks, both from malicious peers on the Bitcoin network and SSV clients.
+Finally, updates to API servers must be cryptographically authenticated.</p>
+<ol>
+<li>Available Records</li>
+</ol>
+<p>The API will serve three fundamental things: bulletins, endorsements and inclusion proofs.
+It will also serve aggregated lists of these things. 
+While the exact schema and available routes of theses requests is descibed elsewhere this section describes </p>
+<p>The schema of bulletins is described in appendix A of this <a href="https://getombuds.org/research">paper</a>.
+The JSON format of endorsements is described in section 2.2 of <a href="DD2">DD2</a>.
+The JSON format of inclusion proofs is described in <a href="DD3">DD3</a>.</p>
+<p>3.1 Aggregates</p>
+<pre><code>The API
+</code></pre>
+<h2>5 Physical Infrastructure</h2>
+<p>A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.
+<code>ombfullnode</code> is a modified full node implementation of Bitcoin, while <code>ombwebapi</code> serves the JSON API over https. 
+This means that a single server must meet the minimum requirements to run a Bitcoin full node <em>and</em> fulfill requests from SSV nodes.</p>
+<h2>5.1 Minimum Requirements</h2>
+<p>Be aware that this is not the recommended setup and it makes more sense to use two different machines. 
+This way one machine can communicate solely with the Bitcoin network and build the public record and the other machine can respond to SSV nodes.
+In any configuration of servers though, the requirements stated above still apply.</p>
+<h2>5.2 Deployment Process</h2>
+<p>There are two ways to set up a deployment of an API server. 
+The first only requires the application binaries and a connection to the Bitcoin network.
+This requires a full download and validation of the bitcoin block chain and the construction of a public record from it.</p>
+<p>The second method relies on a trusted checkpoint or a friends application data to supply the initial block chain and public record.
+While we don't endorse this method of setting up an API.
+We will be distributing a bootstrap file for Bitcoin's Testnet, so that folks can test their deployments of the server API before running the real thing.
+That bundle of bootstrap data will be released with new versions of the software.
+The process is decribed further in <a href="">section 7.2</a>.</p>
+        
+        
+        
+        
+        <hr class="clear" />
+      </div> <!-- div#content -->
+      
+      
+      <div id="footer">
+        <p>
+          
+            Ombuds Technical Specification —
+          
+          Powered by <a href="http://markdoc.org/">Markdoc</a>.
+        </p>
+      </div>
+      
+    
+    
+    
+    <hr class="clear" />
+  </body>
+</html>
