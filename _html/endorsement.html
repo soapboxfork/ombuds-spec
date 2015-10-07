@@ -68,9 +68,9 @@
         
         <!-- title: endorsments -->
 
-<h2>Endorsement Specification</h2>
+<h2>Endorsement Specification // DRAFT</h2>
 <h1>Overview</h1>
-<p>An endorsement is a type of message that can be encododed in a Bitcoin transaction.
+<p>An endorsement is a type of record that can be encododed in a Bitcoin transaction.
 The goal of an endorsement is to provide a low cost, permanent way for organizations and individuals to publicly signal to the network that bulletin satisfies their criterea for endorsement. 
 By providing an open mechanism for people to express approval of specific bulletins, more meaningful interactions can occur through Ombuds.</p>
 <p>An example of this would be auditing a system that produces backups of politically sensitive tweets.
@@ -102,7 +102,7 @@ in exchange for money
 }
 </code></pre>
 <p>This buffer is encoded according to version 1.5.1 of Google's protocol buffer specification.
-It is prefixed with the 4 byte indicator that informs parsers that the following message is a Ombuds data-type.
+It is prefixed with the 4 byte indicator that informs parsers that the following bytes are an Ombuds record.
 An example of the total payload encoded in hex follows this format:</p>
 <pre><code>                  head |        protocol buffer   |
 payload byte[] := 0xBEEF843F6724A347297987CD232304D

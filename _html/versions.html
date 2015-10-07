@@ -16,7 +16,7 @@
       
       <title>
         Ombuds Technical Specification » 
-        Ombuds Spec
+        Versioning
       </title>
       
       
@@ -44,9 +44,15 @@
   
     <ol id="breadcrumbs">
       
-        <li class="crumb-0 last">
+        <li class="crumb-0 not-last">
           
-            index
+            <a href="./">index</a>
+          
+        </li>
+      
+        <li class="crumb-1 last">
+          
+            versions
           
         </li>
       
@@ -60,40 +66,25 @@
         
         
         
-        <!-- title: Ombuds Spec -->
+        <!-- title: Versioning -->
 
-<h1>Ombuds Technical Specification</h1>
-<p>Ombuds ensures a person's words are neither forgotten nor modified.
-This document defines and specifies the implementation of <a href="https://getombuds.org/research/">Ombuds: A Public Space With a Single Shared History</a>.</p>
-<h2>Protocol Definitions</h2>
-<dl>
-<dt><a href="public_record">Public Record</a></dt>
-<dd>A single, consistent database of all public bulletins and public endorsements. Derived from a block chain, a public record is an immutable, append only data set.</dd>
-<dt><a href="author">Author</a></dt>
-<dd>The Base58Check encoded address of the public key that signed a record.</dd>
-<dt><a href="bulletin">Bulletin</a></dt>
-<dd>The common format for statements stored within the public record.</dd>
-<dt><a href="endorsement">Endorsement</a></dt>
-<dd>A record signing one's approval to some bulletin, also stored within the public record.</dd>
-</dl>
-<h2>System Design</h2>
-<dl>
-<dt><a href="mobile-arch">Mobile Architecture</a></dt>
-<dd>The design of the planned Android app written by <a href="http://soapbox.systems">Soapbox Systems</a>.</dd>
-<dt><a href="web-relay-api">Web Relay API Design</a></dt>
-<dd>The design of the HTTP api that Web and mobile clients consume.</dd>
-</dl>
-<h2>Future Work</h2>
-<dl>
-<dt><a href="audit-api-exten">Publicly Auditable API</a></dt>
-<dd>A draft of an extension for the web relay API that lets clients audit the servers they rely on.</dd>
-</dl>
-<hr />
-<h2>Meta</h2>
-<dl>
-<dt><a href="versions">How this Spec is Versioned</a></dt>
-<dd>Each document in this specification is governed by a review process</dd>
-</dl>
+<h1>Design Document Versioning // DRAFT</h1>
+<p>The documents contained on specify intended program behaivor, because the documents themselves are changing things themselves it is useful to label them.
+The label scheme is simple. Each document proceeds in order from Draft --&gt; Revision --&gt; Implemented. </p>
+<p>What follows below is the criterea for what you can expect from a document labeled in these ways.</p>
+<h3>Draft</h3>
+<p>Nothing in a draft is final or an official decision or spell checked. 
+A draft represents a rough take on a specific design and should not be relied upon.</p>
+<h3>Revision</h3>
+<p>A revision is a work in progress that has been reviewed at least once by someone other than the original author.
+A revision will be versioned in numerically increasing order and document changes if the document is popular enough to warrant that disscussion.
+A revision will carry a <strong>Status of this Document</strong> section that is co-authored by the reviewer and the author.</p>
+<h3>Implemented</h3>
+<p>A document that is implemented is running in live code. 
+This document can be understood as the intended functionality of the system.
+Any aspects of the system that do not conform to an implemented design doc are failures in the implementation.
+Like Revisions implementation documents can be versioned in numerically increasing order.
+A implemented doc will carry a <strong>Status of this Document</strong> section that is co-authored by the author of the implementation.</p>
         
         
         

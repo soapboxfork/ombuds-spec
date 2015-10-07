@@ -1,6 +1,6 @@
 <!-- title: Web Relay Spec -->
 
-Web Relay API Design Description
+Web Relay API Design Description // DRAFT
 --------------------------------
 
 Overview

@@ -15,23 +15,24 @@ This document defines and specifies the implementation of [Ombuds: A Public Spac
 :   The common format for statements stored within the public record.
 
 [Endorsement](/endorsement)
-:   A message signing one's approval to some bulletin, also stored within the public record.
+:   A record signing one's approval to some bulletin, also stored within the public record.
 
 ## System Design
 
 [Mobile Architecture](/mobile-arch)
-:   The design of the planned Ombuds app released by [Soapbox Systems](http://soapbox.systems).
+:   The design of the planned Android app written by [Soapbox Systems](http://soapbox.systems).
 
 [Web Relay API Design](/web-relay-api)
 :   The design of the HTTP api that Web and mobile clients consume.
 
 ## Future Work
 
-[Publicly Auditable APIs](/audit-api-exten)
+[Publicly Auditable API](/audit-api-exten)
 :   A draft of an extension for the web relay API that lets clients audit the servers they rely on.
 
 ---------------------
 
 ## Meta
 
-[How this Spec is Updated](/)
+[How this Spec is Versioned](/versions)
+: Each document in this specification is governed by a review process

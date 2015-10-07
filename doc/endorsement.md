@@ -1,11 +1,11 @@
 <!-- title: endorsments -->
 
-Endorsement Specification
+Endorsement Specification // DRAFT
 -------------------------
 
 Overview
 ========
-An endorsement is a type of message that can be encododed in a Bitcoin transaction.
+An endorsement is a type of record that can be encododed in a Bitcoin transaction.
 The goal of an endorsement is to provide a low cost, permanent way for organizations and individuals to publicly signal to the network that bulletin satisfies their criterea for endorsement. 
 By providing an open mechanism for people to express approval of specific bulletins, more meaningful interactions can occur through Ombuds.
 
@@ -47,7 +47,7 @@ An endorsement is defined as a Bitcoin transaction which contains the following 
     }
 
 This buffer is encoded according to version 1.5.1 of Google's protocol buffer specification.
-It is prefixed with the 4 byte indicator that informs parsers that the following message is a Ombuds data-type.
+It is prefixed with the 4 byte indicator that informs parsers that the following bytes are an Ombuds record.
 An example of the total payload encoded in hex follows this format:
 
                       head |        protocol buffer   |
