@@ -6,19 +6,19 @@ Author Explanation
 Overview
 ========
 The author field is used in several places in Ombuds. 
-Namely, it is used in bulletins and endorsements to specify the 'identity' of the messages creator. 
+Namely, it is used in bulletins and endorsements to specify the 'identity' of the records creator. 
 Using the term author here is imprecise, but it helps regular folks understand what is going on.
-For technical purposes the author field is filled by the bitcoin address that corresponds to the first public key that signed the Bitcoin transaction which contains the message.
+For technical purposes the author field is filled by the bitcoin address that corresponds to the first public key that signed the Bitcoin transaction which contains the record.
 
-Any message created in Ombuds must have a signature over its contents and that signature has to a conform to a strict format.
+Any record created in Ombuds must have a signature over its contents and that signature has to a conform to a strict format.
 Otherwise, the whole bulletin will be discarded because the signature was invalid.
 
 
 Valid Signature Format
 ======================
 
-There is only one valid format that is used to assign the author of a message.
-A message's first transaction input (short: *TxIn*) must contain a Script Sig that conforms to the standard pay to public key hash format.
+There is only one valid format that is used to assign the author of a record.
+A record's first transaction input (short: *TxIn*) must contain a Script Sig that conforms to the standard pay to public key hash format.
 This means that the OP_CHECKSIG included in the referenced Transaction Output, MUST be flagged as SIG_HASH_ALL or SIG_HASH_ANYONECANPAY
 
 The author is then assigned to the public key hash in Base58Check notation.

@@ -9,7 +9,7 @@ This document defines and specifies the implementation of [Ombuds: A Public Spac
 :   A single, consistent database of all public bulletins and public endorsements. Derived from a block chain, a public record is an immutable, append only data set.
 
 [Author](/author)
-:   blah blah blah
+:   The Base58Check encoded address of the public key that signed a record.
 
 [Bulletin](/bulletin)
 :   The common format for statements stored within the public record.
