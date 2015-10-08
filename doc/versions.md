@@ -1,7 +1,7 @@
 <!-- title: Versioning -->
 
 Design Document Versioning // DRAFT
-==========================
+--------------------------
 
 The documents contained on specify intended program behaivor, because the documents themselves are changing things themselves it is useful to label them.
 The label scheme is simple. Each document proceeds in order from Draft --> Revision --> Implemented. 
@@ -22,5 +22,5 @@ A document that is implemented is running in live code.
 This document can be understood as the intended functionality of the system.
 Any aspects of the system that do not conform to an implemented design doc are failures in the implementation.
 Like Revisions implementation documents can be versioned in numerically increasing order.
-An implemented document will carry a **Status of this Document** section that is co-authored by the author of the implementation.
+An implemented document will carry a **Status of this Document** section that is written by the author of the code.
 

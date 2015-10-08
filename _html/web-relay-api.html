@@ -126,8 +126,45 @@ While the exact schema and available routes of theses requests is descibed elsew
 <p>The schema of bulletins is described in appendix A of this <a href="https://getombuds.org/research">paper</a>.
 The JSON format of endorsements is described in section 2.2 of <a href="DD2">DD2</a>.
 The JSON format of inclusion proofs is described in <a href="DD3">DD3</a>.</p>
-<p>3.1 Aggregates</p>
-<pre><code>The API
+<ol>
+<li>API Routes and Responses</li>
+</ol>
+<p>The api itself will provide the following routes to the user. 
+The required fields are surrounded in brackets (eg. [ ]).
+The return type follows after the arrow (==&gt;).
+The available query parameters further restrict behaivor of the API.</p>
+<pre><code>Individual
+
+/bltn/[txid]        ==&gt;     bulletin
+/endo/[txid]        ==&gt;     endorsement
+
+Paginated
+
+/author/[address]   ==&gt;     records
+/tag/[tag]          ==&gt;     records
+/loc/[lat]-[lon]    ==&gt;     records
+/block/[hash]       ==&gt;     records
+
+Available Query parameters
+
+    before=[blk hash]
+    after=[blk hash]
+    limit=[num records]
+    type=[type records]
+
+
+Aggregates
+
+/pop-tags          ==&gt;      bulletins
+/most-endo         ==&gt;      bulletins
+/dense-locs        ==&gt;      bulletins
+/dense-areas       ==&gt;      records
+/new               ==&gt;      records
+
+Available Query Parameters
+
+before=[blk hash]
+limit=[num records]
 </code></pre>
 <h2>5 Physical Infrastructure</h2>
 <p>A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.

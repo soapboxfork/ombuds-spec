@@ -81,7 +81,8 @@ JSON Schema
 ===========
 
 The JSON schema of an endorsement follows the same conventions laid out by the JSON format for bulletins.
-An example endorsement returned by a JSON API looks like this.
+An example endorsement returned by a JSON API looks like this. 
+Be aware that the fields are specified in the [ombudslib](https://github.com/soapboxsys/ombudslib) package definitively.
 
     {
         txid:      "c9be2cbeb2da2dfe1f0158246938a3899f4e5c5108ea54e75c7c4f22580e42bc",

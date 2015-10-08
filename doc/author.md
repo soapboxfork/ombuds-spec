@@ -1,10 +1,10 @@
 <!-- title: Author -->
 
 Author Explanation // DRAFT
-------------------
+==================
 
 Overview
-========
+--------
 The author field is used in several places in Ombuds. 
 Namely, it is used in bulletins and endorsements to specify the 'identity' of the records creator. 
 Using the term author here is imprecise, but it helps regular folks understand what is going on.
@@ -15,7 +15,7 @@ Otherwise, the whole bulletin will be discarded because the signature was invali
 
 
 Valid Signature Format
-======================
+----------------------
 
 There is only one valid format that is used to assign the author of a record.
 A record's first transaction input (short: *TxIn*) must contain a Script Sig that conforms to the standard pay to public key hash format.
@@ -24,12 +24,13 @@ This means that the OP_CHECKSIG included in the referenced Transaction Output, M
 The author is then assigned to the public key hash in Base58Check notation.
 
 
-### Canonical Example
+Canonical Example
+-----------------
 
 Notice that the first signing address in this transaction is also the author of the bulletin contained within.
 
-####A bulletin 
-(with irrelevant fields removed):
+####Bulletin 
+With irrelevant fields elided with ...
 
     {
         "txid" : "5a57ebcba9a52f770887ea1a4d039a67cf252b6ec25630ff4f42d09f0398faca",
@@ -40,8 +41,8 @@ Notice that the first signing address in this transaction is also the author of 
         ...
     }
     
-####The Containing Transaction 
-(with irrelevant fields removed):
+####Containing Transaction 
+With irrelevant fields elided with ...
 
     {
         "txid" : "5a57ebcba9a52f770887ea1a4d039a67cf252b6ec25630ff4f42d09f0398faca",

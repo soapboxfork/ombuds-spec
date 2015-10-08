@@ -77,9 +77,50 @@ The schema of bulletins is described in appendix A of this [paper](https://getom
 The JSON format of endorsements is described in section 2.2 of [DD2](/DD2).
 The JSON format of inclusion proofs is described in [DD3](/DD3).
 
-3.1 Aggregates
+
+
+
+
+4. API Routes and Responses
     
-    The API
+The api itself will provide the following routes to the user. 
+The required fields are surrounded in brackets (eg. [ ]).
+The return type follows after the arrow (==>).
+The available query parameters further restrict behaivor of the API.
+
+    Individual
+
+    /bltn/[txid]        ==>     bulletin
+    /endo/[txid]        ==>     endorsement
+
+    Paginated
+
+    /author/[address]   ==>     records
+    /tag/[tag]          ==>     records
+    /loc/[lat]-[lon]    ==>     records
+    /block/[hash]       ==>     records
+    
+    Available Query parameters
+
+        before=[blk hash]
+        after=[blk hash]
+        limit=[num records]
+        type=[type records]
+
+     
+    Aggregates
+
+    /pop-tags          ==>      bulletins
+    /most-endo         ==>      bulletins
+    /dense-locs        ==>      bulletins
+    /dense-areas       ==>      records
+    /new               ==>      records
+
+    Available Query Parameters
+    
+    before=[blk hash]
+    limit=[num records]
+
 
 ## 5 Physical Infrastructure
 

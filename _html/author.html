@@ -68,23 +68,23 @@
         
         <!-- title: Author -->
 
-<h2>Author Explanation // DRAFT</h2>
-<h1>Overview</h1>
+<h1>Author Explanation // DRAFT</h1>
+<h2>Overview</h2>
 <p>The author field is used in several places in Ombuds. 
 Namely, it is used in bulletins and endorsements to specify the 'identity' of the records creator. 
 Using the term author here is imprecise, but it helps regular folks understand what is going on.
 For technical purposes the author field is filled by the bitcoin address that corresponds to the first public key that signed the Bitcoin transaction which contains the record.</p>
 <p>Any record created in Ombuds must have a signature over its contents and that signature has to a conform to a strict format.
 Otherwise, the whole bulletin will be discarded because the signature was invalid.</p>
-<h1>Valid Signature Format</h1>
+<h2>Valid Signature Format</h2>
 <p>There is only one valid format that is used to assign the author of a record.
 A record's first transaction input (short: <em>TxIn</em>) must contain a Script Sig that conforms to the standard pay to public key hash format.
 This means that the OP_CHECKSIG included in the referenced Transaction Output, MUST be flagged as SIG_HASH_ALL or SIG_HASH_ANYONECANPAY</p>
 <p>The author is then assigned to the public key hash in Base58Check notation.</p>
-<h3>Canonical Example</h3>
+<h2>Canonical Example</h2>
 <p>Notice that the first signing address in this transaction is also the author of the bulletin contained within.</p>
-<h4>A bulletin</h4>
-<p>(with irrelevant fields removed):</p>
+<h4>Bulletin</h4>
+<p>With irrelevant fields elided with ...</p>
 <pre><code>{
     "txid" : "5a57ebcba9a52f770887ea1a4d039a67cf252b6ec25630ff4f42d09f0398faca",
     "author" : "n25H1Lpt1YbKhu6SU8L8rZ4HdZjAAaPbZN",
@@ -94,8 +94,8 @@ This means that the OP_CHECKSIG included in the referenced Transaction Output, M
     ...
 }
 </code></pre>
-<h4>The Containing Transaction</h4>
-<p>(with irrelevant fields removed):</p>
+<h4>Containing Transaction</h4>
+<p>With irrelevant fields elided with ...</p>
 <pre><code>{
     "txid" : "5a57ebcba9a52f770887ea1a4d039a67cf252b6ec25630ff4f42d09f0398faca",
     "vin" : [
