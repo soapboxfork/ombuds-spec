@@ -140,10 +140,10 @@ The available query parameters further restrict behaivor of the API.</p>
 
 Paginated
 
-/author/[address]   ==&gt;     records
-/tag/[tag]          ==&gt;     records
-/loc/[lat]-[lon]    ==&gt;     records
-/block/[hash]       ==&gt;     records
+/author/[address]   ==&gt;     records       ; The records an author has produced.
+/tag/[name]         ==&gt;     records       ; The records that contain a specific tag.
+/loc/[lat],[lon],[r]==&gt;     bulletins     ; The bulletins generated within r km of lat, lon
+/block/[hash]       ==&gt;     records       ; All of the records within a block.
 
 Available Query parameters
 
@@ -152,20 +152,28 @@ Available Query parameters
     limit=[num records]
     type=[type records]
 
-
 Aggregates
 
-/pop-tags          ==&gt;      bulletins
-/most-endo         ==&gt;      bulletins
-/dense-locs        ==&gt;      bulletins
-/dense-areas       ==&gt;      records
-/new               ==&gt;      records
+/pop-tags          ==&gt;      tags          ; The most popular tags within T of now.
+/most-endo         ==&gt;      bulletins     ; The most endorsed bulletins within T
+/dense-locs        ==&gt;      locations     ; The most active locations within T
+/dense-areas       ==&gt;      records       ; The densest areas of the graph within T
+/new               ==&gt;      records       ; New records in the public record.
 
 Available Query Parameters
 
-before=[blk hash]
-limit=[num records]
+    T=after=[blk hash]
+    before=[blk hash]
+    limit=[num records]
+
+Informational
+
+/status            ==&gt;      See section 5.1.1 
+/config            ==&gt;      See section 5.1.2
 </code></pre>
+<h3>4.1 Pagination</h3>
+<p>For requests that could return many records, if the limit param is not specified or is higher than the API servers MAX_RETURN field then the server will paginate its return values.
+Pagination is based on blocks such that </p>
 <h2>5 Physical Infrastructure</h2>
 <p>A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.
 <code>ombfullnode</code> is a modified full node implementation of Bitcoin, while <code>ombwebapi</code> serves the JSON API over https. 
@@ -183,6 +191,11 @@ While we don't endorse this method of setting up an API.
 We will be distributing a bootstrap file for Bitcoin's Testnet, so that folks can test their deployments of the server API before running the real thing.
 That bundle of bootstrap data will be released with new versions of the software.
 The process is decribed further in <a href="">section 7.2</a>.</p>
+<h2>6.1 Protecting Users</h2>
+<pre><code>`Honest servers do not keep logs.`
+
+`Available Over Tor`
+</code></pre>
         
         
         

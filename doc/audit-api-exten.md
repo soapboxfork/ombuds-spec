@@ -153,6 +153,7 @@ Each JSON response returned by the server MUST include a JWS message signature.
             // JOSE Headers
             "x5t#S256": "34ed032...", 
             "alg": "HS512"
+            // Need a timestamp that is signed.
         },
         "signature": "<signature N contents>"
     }

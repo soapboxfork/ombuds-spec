@@ -78,9 +78,6 @@ The JSON format of endorsements is described in section 2.2 of [DD2](/DD2).
 The JSON format of inclusion proofs is described in [DD3](/DD3).
 
 
-
-
-
 4. API Routes and Responses
     
 The api itself will provide the following routes to the user. 
@@ -95,10 +92,10 @@ The available query parameters further restrict behaivor of the API.
 
     Paginated
 
-    /author/[address]   ==>     records
-    /tag/[tag]          ==>     records
-    /loc/[lat]-[lon]    ==>     records
-    /block/[hash]       ==>     records
+    /author/[address]   ==>     records       ; The records an author has produced.
+    /tag/[name]         ==>     records       ; The records that contain a specific tag.
+    /loc/[lat],[lon],[r]==>     bulletins     ; The bulletins generated within r km of lat, lon
+    /block/[hash]       ==>     records       ; All of the records within a block.
     
     Available Query parameters
 
@@ -107,19 +104,29 @@ The available query parameters further restrict behaivor of the API.
         limit=[num records]
         type=[type records]
 
-     
     Aggregates
 
-    /pop-tags          ==>      bulletins
-    /most-endo         ==>      bulletins
-    /dense-locs        ==>      bulletins
-    /dense-areas       ==>      records
-    /new               ==>      records
+    /pop-tags          ==>      tags          ; The most popular tags within T of now.
+    /most-endo         ==>      bulletins     ; The most endorsed bulletins within T
+    /dense-locs        ==>      locations     ; The most active locations within T
+    /dense-areas       ==>      records       ; The densest areas of the graph within T
+    /new               ==>      records       ; New records in the public record.
 
     Available Query Parameters
     
-    before=[blk hash]
-    limit=[num records]
+        T=after=[blk hash]
+        before=[blk hash]
+        limit=[num records]
+
+    Informational
+
+    /status            ==>      See section 5.1.1 
+    /config            ==>      See section 5.1.2
+
+### 4.1 Pagination
+
+For requests that could return many records, if the limit param is not specified or is higher than the API servers MAX_RETURN field then the server will paginate its return values.
+Pagination is based on blocks such that 
 
 
 ## 5 Physical Infrastructure
@@ -145,4 +152,11 @@ While we don't endorse this method of setting up an API.
 We will be distributing a bootstrap file for Bitcoin's Testnet, so that folks can test their deployments of the server API before running the real thing.
 That bundle of bootstrap data will be released with new versions of the software.
 The process is decribed further in [section 7.2]().
+
+## 6.1 Protecting Users
+
+    `Honest servers do not keep logs.`
+
+    `Available Over Tor`
+
 
