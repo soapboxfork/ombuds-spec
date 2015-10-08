@@ -94,7 +94,7 @@ The available query parameters further restrict behaivor of the API.
 
     /author/[address]   ==>     records       ; The records an author has produced.
     /tag/[name]         ==>     records       ; The records that contain a specific tag.
-    /loc/[lat],[lon],[r]==>     bulletins     ; The bulletins generated within r km of lat, lon
+    /loc/[lat],[lon],[r]==>     bulletins     ; The bulletins generated within r km of (lat, lon)
     /block/[hash]       ==>     records       ; All of the records within a block.
     
     Available Query parameters
@@ -104,7 +104,7 @@ The available query parameters further restrict behaivor of the API.
         limit=[num records]
         type=[type records]
 
-    Aggregates
+    Aggregates                                ; See 4.0 for more detailed explanations
 
     /pop-tags          ==>      tags          ; The most popular tags within T of now.
     /most-endo         ==>      bulletins     ; The most endorsed bulletins within T
@@ -118,15 +118,63 @@ The available query parameters further restrict behaivor of the API.
         before=[blk hash]
         limit=[num records]
 
-    Informational
+    Information
 
     /status            ==>      See section 5.1.1 
     /config            ==>      See section 5.1.2
 
+### 4. Aggregated Responses
+
+`/pop-tags` returns the most commonly used tags in the last T blocks in a list. 
+The schema looks like this:
+
+    {
+        tags: ["#bankcorp", "#homs", "#Jan25", "#utopia", "#gtown"]
+         
+    }
+
+
 ### 4.1 Pagination
 
-For requests that could return many records, if the limit param is not specified or is higher than the API servers MAX_RETURN field then the server will paginate its return values.
-Pagination is based on blocks such that 
+For requests that could return many records, if the limit param is not specified or is higher than the server's MAX_RETURN field then the server will paginate the list of results
+Pagination is based on two things, the number of records that could be returned by the query and the blocks which the records are in.
+A paginated query will return all records within consecutive blocks where the number of records returned does not exceed the max number of records it is allowed to return. 
+
+This means that if records in blocks are arranged like in the example below and a query asks for all of the records, then only records in the first 3 blocks are returned. (If the limit is set to 20.)
+
+    query is /new?limit=20
+
+    blocks:       a320f <--- b79de <--- c3421 <--- d3725 <--- e2934
+    Num records:   15         73         4          7          9 
+
+The response then looks like this:
+
+    {
+        records: [ { txid: "d932e..." ...},
+                   { txid: "b3f1a..." ...},
+                   { txid: "f3f65..." ...},
+                   ...
+                 ],
+
+        stop: "c3421",
+        start: "e2934"
+    }
+
+It may be suprising to see, but if the client responds with another query asking for the new records before c3421 the number of results will exceed the user set 'limit'. 
+This is because the API servers will return all results in a block if they must return some even if it means violating the user set limit.
+This is done to keep the api queries simple not to be maniacal.
+    
+    query is /new?before=c3421&limit=5
+
+    {
+        records: [ { txid: "4832d..." ...}
+                   { txid: "b422e..." ...}    
+                   { txid: "g3943..." ...}
+                   ... // And 69 more
+            ],
+        stop:  "b79d4",
+        start: "b79d4"
+    }    
 
 
 ## 5 Physical Infrastructure

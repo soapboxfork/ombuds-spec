@@ -142,7 +142,7 @@ Paginated
 
 /author/[address]   ==&gt;     records       ; The records an author has produced.
 /tag/[name]         ==&gt;     records       ; The records that contain a specific tag.
-/loc/[lat],[lon],[r]==&gt;     bulletins     ; The bulletins generated within r km of lat, lon
+/loc/[lat],[lon],[r]==&gt;     bulletins     ; The bulletins generated within r km of (lat, lon)
 /block/[hash]       ==&gt;     records       ; All of the records within a block.
 
 Available Query parameters
@@ -152,7 +152,7 @@ Available Query parameters
     limit=[num records]
     type=[type records]
 
-Aggregates
+Aggregates                                ; See 4.0 for more detailed explanations
 
 /pop-tags          ==&gt;      tags          ; The most popular tags within T of now.
 /most-endo         ==&gt;      bulletins     ; The most endorsed bulletins within T
@@ -166,14 +166,56 @@ Available Query Parameters
     before=[blk hash]
     limit=[num records]
 
-Informational
+Information
 
 /status            ==&gt;      See section 5.1.1 
 /config            ==&gt;      See section 5.1.2
 </code></pre>
+<h3>4. Aggregated Responses</h3>
+<p><code>/pop-tags</code> returns the most commonly used tags in the last T blocks in a list. 
+The schema looks like this:</p>
+<pre><code>{
+    tags: ["#bankcorp", "#homs", "#Jan25", "#utopia", "#gtown"]
+
+}
+</code></pre>
 <h3>4.1 Pagination</h3>
-<p>For requests that could return many records, if the limit param is not specified or is higher than the API servers MAX_RETURN field then the server will paginate its return values.
-Pagination is based on blocks such that </p>
+<p>For requests that could return many records, if the limit param is not specified or is higher than the server's MAX_RETURN field then the server will paginate the list of results
+Pagination is based on two things, the number of records that could be returned by the query and the blocks which the records are in.
+A paginated query will return all records within consecutive blocks where the number of records returned does not exceed the max number of records it is allowed to return. </p>
+<p>This means that if records in blocks are arranged like in the example below and a query asks for all of the records, then only records in the first 3 blocks are returned. (If the limit is set to 20.)</p>
+<pre><code>query is /new?limit=20
+
+blocks:       a320f &lt;--- b79de &lt;--- c3421 &lt;--- d3725 &lt;--- e2934
+Num records:   15         73         4          7          9
+</code></pre>
+<p>The response then looks like this:</p>
+<pre><code>{
+    records: [ { txid: "d932e..." ...},
+               { txid: "b3f1a..." ...},
+               { txid: "f3f65..." ...},
+               ...
+             ],
+
+    stop: "c3421",
+    start: "e2934"
+}
+</code></pre>
+<p>It may be suprising to see, but if the client responds with another query asking for the new records before c3421 the number of results will exceed the user set 'limit'. 
+This is because the API servers will return all results in a block if they must return some even if it means violating the user set limit.
+This is done to keep the api queries simple, not to be a manicial monster.</p>
+<pre><code>query is /new?before=c3421&amp;limit=5
+
+{
+    records: [ { txid: "4832d..." ...}
+               { txid: "b422e..." ...}    
+               { txid: "g3943..." ...}
+               ... // And 69 more
+            ],
+        stop:  "b79d4",
+        start: "b79d4"
+}
+</code></pre>
 <h2>5 Physical Infrastructure</h2>
 <p>A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.
 <code>ombfullnode</code> is a modified full node implementation of Bitcoin, while <code>ombwebapi</code> serves the JSON API over https. 
