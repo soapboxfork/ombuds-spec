@@ -1,4 +1,4 @@
-<!-- title: endorsments -->
+<!-- title: Endorsment Def -->
 
 Endorsement Specification // DRAFT
 -------------------------
@@ -32,17 +32,72 @@ All of the definitions or none of them can apply to an endoresment stored in the
 
 Contents
 ========
-1. Specification
+1. Wire Protocol Schema
 2. Public Record Schema
 3. JSON Schema
 
-Specification
-=============
+Creating a Web of Trust
+=======================
 
-An endorsement is defined as a Bitcoin transaction which contains the following protocol buffer in a data carrying output.
+Bitcoin-OTC. Defines how people get from one trusted person to another.
 
-    message endorsment {
-        required bytes txid         = 1; // A 32 byte SHA hash
+Chains of trust gives us insight into a graph.
+The current model only gives us one directed edge.
+
+    Reporter A                Voice OA                   
+
+        bulletin 1  <----  endorsements
+
+This results only in the following structure.
+    
+    Reporter A
+
+        bulletin 1  <----  VoA
+                           HWR
+                           AmI
+        bulletin 2  <----  Glenn
+                           HWR
+
+        bulletin 3  <----  Glenn
+        
+This means that Reporter A cannot transfer his legitmacy to another person.
+
+    Reporter B      | 
+                    |                         
+        bulletin 1  | <--- Reporter A <--- VoA
+                    |                      AmI 
+                    |                      HWR 
+
+
+    Person C          Reporter B       Institutions
+
+                       bltn 1B<---------- Voa
+                                 \_______ HWR
+                                 \_______ AmI
+
+        bltn 1C <---- Endorses
+
+
+An external reader just looks at the institutions at the edge of this network.
+That reader uses those orgs as my hook into believing some of the content.
+They cannot get deeper into the web without making a jump from trusting a bulletin to trusting the author of the bulletin.
+These are two very different things.
+
+Want a tool to analytically tell them who in the graph they should trust.
+
+Open questons: 
+- Can a meaningful web be constructed with the design as is?
+- What web can be constructed from the existing setup?
+- What are the small tweaks that are needed to make a better WoT?              
+
+
+Wire Protocol Schema
+====================
+
+An endorsement is defined as a Bitcoin transaction that contains the following protocol buffer in a series of data carrying outputs.
+
+    message WireEndorsment {
+        required bytes bid          = 1; // A 32 byte SHA hash of the referenced bulletin's txid
         required int64 timestamp    = 2; // Seconds since 00:00:00 Jan 1, 1970
     }
 

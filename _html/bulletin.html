@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+    "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  
+  <head>
+    
+    
+      
+        <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+      
+      
+      <title>
+        Ombuds Technical Specification » 
+        Bulletins Def
+      </title>
+      
+      
+        <!-- YUI CSS reset, fonts, base -->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.0.0/build/cssreset/reset-min.css&amp;3.0.0/build/cssfonts/fonts-min.css&amp;3.0.0/build/cssbase/base-min.css" media="screen, projection" />
+        
+        <link rel="stylesheet" type="text/css" href="media/css/style.css" media="screen, projection" />
+        <link rel="stylesheet" type="text/css" href="media/css/pygments.css" media="screen, projection" />
+      
+      
+      
+      
+      
+        
+      
+    
+  </head>
+  
+  <body >
+    
+      
+      
+        
+          
+  
+    <ol id="breadcrumbs">
+      
+        <li class="crumb-0 not-last">
+          
+            <a href="./">index</a>
+          
+        </li>
+      
+        <li class="crumb-1 last">
+          
+            bulletin
+          
+        </li>
+      
+    </ol> <!-- ol#breadcrumbs -->
+  
+
+        
+      
+      
+      <div id="content">
+        
+        
+        
+        <!-- title: Bulletins Def -->
+
+<h2>Bulletin Specification // DRAFT</h2>
+<h1>Overview</h1>
+<p>Occasionally the term when talking about Ombuds the term public statement is used. 
+Nine times out of ten, the speaker is referring to a bulletin stored in the public record.</p>
+<p>A bulletin is the name for a statement containing text, a timestamp, and optionally a location.
+A bulletin's author is attributed to a public key according to <a href="author#2.7">section of 2.7 of DD03</a>.</p>
+<p>For a bulletin to be considered part of the public record it must be included in Bitcoin's block chain.
+See section 5.1 of the thesis for a further discussion on the security implications of the previous statement.</p>
+<p>What follows below is a description of the formats bulletins can be in.</p>
+<h1>Contents</h1>
+<ol>
+<li>Wire Protocol Schema</li>
+<li>Public Record Schema</li>
+<li>JSON Schema</li>
+</ol>
+<h1>Wire Protocol Schema</h1>
+<p>A bulletin is defined as a Bitcoin transaction that contains the following protocol buffer in a series of data carrying outputs.
+A bulletin can either be encoded in a bitcoin in several ways. 
+A parser will look for the message in various encoding formats as described in <a href="DD01">section 2.7.3 Encoding Formats of DD01</a>.</p>
+<pre><code>message WireBulletin {
+    required string message     = 1;
+    required int64 timestamp    = 2; // Seconds since 00:00:00 Jan 1, 1970
+    optional location           = 3;
+}
+
+message location {
+    required lat                = 1;
+    required lon                = 2;
+}
+</code></pre>
+<h1>Public Record Schema</h1>
+<p>The SQl schema for a bulletin can be found at its <a href="https://github.com/soapboxsys/ombudslib/blob/master/protocol/schema.sql">source</a>.</p>
+<h1>JSON Schema</h1>
+<p>The fields of a bulletin encoded in JSON is fully specified in <a href="https://github.com/soapboxsys/ombudslib/blob/master/ombjson/responses.go">bulletin.go</a></p>
+        
+        
+        
+        
+        <hr class="clear" />
+      </div> <!-- div#content -->
+      
+      
+      <div id="footer">
+        <p>
+          
+            Ombuds Technical Specification —
+          
+          Powered by <a href="http://markdoc.org/">Markdoc</a>.
+        </p>
+      </div>
+      
+    
+    
+    
+    <hr class="clear" />
+  </body>
+</html>

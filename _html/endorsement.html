@@ -16,7 +16,7 @@
       
       <title>
         Ombuds Technical Specification » 
-        endorsments
+        Endorsment Def
       </title>
       
       
@@ -66,7 +66,7 @@
         
         
         
-        <!-- title: endorsments -->
+        <!-- title: Endorsment Def -->
 
 <h2>Endorsement Specification // DRAFT</h2>
 <h1>Overview</h1>
@@ -90,14 +90,58 @@ in exchange for money
 <p>All of the definitions or none of them can apply to an endoresment stored in the public record.</p>
 <h1>Contents</h1>
 <ol>
-<li>Specification</li>
+<li>Wire Protocol Schema</li>
 <li>Public Record Schema</li>
 <li>JSON Schema</li>
 </ol>
-<h1>Specification</h1>
-<p>An endorsement is defined as a Bitcoin transaction which contains the following protocol buffer in a data carrying output.</p>
-<pre><code>message endorsment {
-    required bytes txid         = 1; // A 32 byte SHA hash
+<h1>Creating a Web of Trust</h1>
+<p>Bitcoin-OTC. Defines how people get from one trusted person to another.</p>
+<p>Chains of trust gives us insight into a graph.
+The current model only gives us one directed edge.</p>
+<pre><code>Reporter A                Voice OA
+
+    bulletin 1  &lt;----  endorsements
+</code></pre>
+<p>This results only in the following structure.</p>
+<pre><code>Reporter A
+
+    bulletin 1  &lt;----  VoA
+                       HWR
+                       AmI
+    bulletin 2  &lt;----  Glenn
+                       HWR
+
+    bulletin 3  &lt;----  Glenn
+</code></pre>
+<p>This means that Reporter A cannot transfer his legitmacy to another person.</p>
+<pre><code>Reporter B      | 
+                |                         
+    bulletin 1  | &lt;--- Reporter A &lt;--- VoA
+                |                      AmI 
+                |                      HWR
+
+
+Person C          Reporter B       Institutions
+
+                   bltn 1B&lt;---------- Voa
+                             \_______ HWR
+                             \_______ AmI
+
+    bltn 1C &lt;---- Endorses
+</code></pre>
+<p>An external reader just looks at the institutions at the edge of this network.
+That reader uses those orgs as my hook into believing some of the content.
+They cannot get deeper into the web without making a jump from trusting a bulletin to trusting the author of the bulletin.
+These are two very different things.</p>
+<p>Want a tool to analytically tell them who in the graph they should trust.</p>
+<p>Open questons: 
+- Can a meaningful web be constructed with the design as is?
+- What web can be constructed from the existing setup?
+- What are the small tweaks that are needed to make a better WoT?              </p>
+<h1>Wire Protocol Schema</h1>
+<p>An endorsement is defined as a Bitcoin transaction that contains the following protocol buffer in a series of data carrying outputs.</p>
+<pre><code>message WireEndorsment {
+    required bytes bid          = 1; // A 32 byte SHA hash of the referenced bulletin's txid
     required int64 timestamp    = 2; // Seconds since 00:00:00 Jan 1, 1970
 }
 </code></pre>

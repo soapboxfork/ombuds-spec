@@ -5,7 +5,7 @@ Ombuds ensures a person's words are neither forgotten nor modified.
 This document defines and specifies the implementation of [Ombuds: A Public Space With a Single Shared History](https://getombuds.org/research/).
 
 ## Protocol Definitions
-[Public Record](/public_record)
+[Public Record](/public-record)
 :   A single, consistent database of all public bulletins and public endorsements. Derived from a block chain, a public record is an immutable, append only data set.
 
 [Author](/author)

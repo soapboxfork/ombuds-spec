@@ -203,7 +203,7 @@ Num records:   15         73         4          7          9
 </code></pre>
 <p>It may be suprising to see, but if the client responds with another query asking for the new records before c3421 the number of results will exceed the user set 'limit'. 
 This is because the API servers will return all results in a block if they must return some even if it means violating the user set limit.
-This is done to keep the api queries simple, not to be a manicial monster.</p>
+This is done to keep the api queries simple not to be maniacal.</p>
 <pre><code>query is /new?before=c3421&amp;limit=5
 
 {
@@ -211,9 +211,9 @@ This is done to keep the api queries simple, not to be a manicial monster.</p>
                { txid: "b422e..." ...}    
                { txid: "g3943..." ...}
                ... // And 69 more
-            ],
-        stop:  "b79d4",
-        start: "b79d4"
+        ],
+    stop:  "b79d4",
+    start: "b79d4"
 }
 </code></pre>
 <h2>5 Physical Infrastructure</h2>
