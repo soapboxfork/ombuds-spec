@@ -68,15 +68,18 @@
         
         <!-- title: Web Relay Spec -->
 
-<h2>Web Relay API Design Description // DRAFT</h2>
-<h1>Overview</h1>
-<p>The goal of this document is to describe the intention behind and the details of a JSON API that exposes the public record over HTTP.
+<h1>Web Relay API Design Description // DRAFT</h1>
+<h2>Overview</h2>
+<p>The goal of this document is to describe the intention behind and the details of a JSON API that exposes the public record over HTTPS.
 This document will cover the specific requirements of an open-source API that serves public statements stored in Bitcoin's block chain.
-How this software is intended to be used and how it must function is covered within.</p>
-<h1>Status of This Document</h1>
-<p>This is a draft design that is subject to change. Further documentation of the API methods themselves can be found in the source code <a href="https://github.com/soapboxsys/ombudslib">here</a>.</p>
-<p>Nick -- October 2015</p>
-<h1>Contents</h1>
+How this software is intended to be used and how it must function is also covered within.</p>
+<h2>Status of This Document</h2>
+<p>While this is not an RFC, the intention behind this document is to describe the system completely so that it is reproducible and well understood.
+Please note this is a <strong>draft of a design</strong> that is subject to change. 
+Do not rely the content of this document for any important decisions.
+It has not been reviewed.</p>
+<p>Nick -- Oct 2015</p>
+<h2>Contents</h2>
 <pre><code>1. Definitions
 2. Introduction
 3. Requirements Overview
@@ -95,33 +98,29 @@ How this software is intended to be used and how it must function is covered wit
 <p>Throughout this document the pronoun "we" is occasionally used. "We" in this context means Alex Kuck and Nick Skelsey.</p>
 <h2>2. Introduction</h2>
 <p>The API discussed here is the interface that mobile application and web based users of Ombuds will rely on for information stored in the public record.
-While it is clear that operator's of APIs and web servers can act maliciously, for the sake of usability and scalability this web-api functions as a centralized piece of core infrastructure. </p>
-<p>The goal here is to produce a compact and performant JSON API that is easy for organizations and individuals to deploy. 
-That being said, the first organization to deploy it will be Soapbox Systems.
-Due to the size of Bitcoin's block chain we cannot expect new participants in this system to fully join the Bitcoin network just to have access to Ombuds.
-Thus to make Ombuds more accessible, clients that cannot or would rather not bear the cost of deploying and maintaining there own network infrastructure can instead trust a third party to serve them relevant application data.</p>
-<p>It is important to note, that the API discussed below is READ only. The only interactions with the system that are conducted through the API is the retireval of records stored in the public record. 
-An SSV client can always verify that the statement is unmoddified and actually included in the record. 
-However, an SSV client can not be sure of whether or not statements have been excluded from the record.
-This problem along with methods to address it is discussed further in <a href="An-Auditable-API">DD02</a>.</p>
+While it is clear that operators of APIs and web servers can act maliciously, for the sake of usability and scalability this web API functions as a centralized piece of core infrastructure. </p>
+<p>The goal of this document is to describe a compact and performant JSON API that is easy for organizations and individuals to deploy. 
+With that said, the first organization to deploy it will be Soapbox Systems.
+Due to the size of Bitcoin's block chain it is unreasonable to expect new participants to fully join the Bitcoin network just to have access to Ombuds.
+Thus, to make Ombuds more accessible clients that cannot or would not bear the cost of deploying and maintaining there own network infrastructure can instead trust a third party to serve them application data.</p>
+<p>It is important to note, that the API discussed below is <strong>read</strong> only.
+The only interactions with the system that are conducted through the API is the retireval of records stored in the public record. </p>
 <h2>3. Requirements Overview</h2>
 <p>In general the goal of this server application is that it runs on modern enterprise grade servers.
 To that end it must support thousands of simulataneous clients while remaining:</p>
-<ol>
+<ul>
 <li>Secure</li>
 <li>Available</li>
 <li>Performant</li>
-<li>Auditable</li>
-</ol>
+<li>Auditable (planned &amp; described in <a href="audit-api">DD04</a></li>
+</ul>
 <h2>4. Available Records</h2>
-<p>The API will serve two fundamental things: bulletins and endorsements.
-It will also serve aggregated lists of these things. 
-While the exact schema and available routes of theses requests is descibed elsewhere this section describes </p>
-<p>The schema of bulletins is described in appendix A of this <a href="https://getombuds.org/research">paper</a>.
-The JSON format of endorsements is described in section 2.2 of <a href="DD2">DD2</a>.
-The JSON format of inclusion proofs is described in <a href="DD3">DD3</a>.</p>
+<p>The API serves two fundamental things: bulletins and endorsements.
+It also serve aggregated lists of these things, along with simple data-types like locations and tags.
+While the exact schema and available routes of theses requests is completely described in the code, any difference between the description of data types here and there implementation should be reported as a bug.</p>
+<p>The complete schema of JSON responses will reside in the golang implmentation <a href="https://github.com/soapboxsys/ombudslib">on Github</a>.</p>
 <h2>5. API Routes and Responses</h2>
-<p>The api itself will provide the following routes to the user. 
+<p>All of the API routes the server exposes are documented below.
 The required fields are surrounded in brackets (eg. [ ]).
 The return type follows after the arrow (==&gt;).
 The available query parameters further restrict behaivor of the API.</p>
@@ -129,13 +128,14 @@ The available query parameters further restrict behaivor of the API.</p>
 
 /endo/[txid]        ==&gt;     endorsement   ; A single endorsement
 /bltn/[txid]        ==&gt;     bulletin      ; A single bulletin with all of its endorsements
+/block/[hash]       ==&gt;     records       ; All of the records within a block.
 
 Paginated
 
-/author/[address]   ==&gt;     records       ; The records an author has produced.
-/tag/[name]         ==&gt;     records       ; The records that contain a specific tag.
-/loc/[lat],[lon],[r]==&gt;     bulletins     ; The bulletins generated within r km of (lat, lon)
-/block/[hash]       ==&gt;     records       ; All of the records within a block.
+/author/[address]    ==&gt;     records       ; The records an author has produced.
+/tag/[name]          ==&gt;     records       ; The records that contain a specific tag.
+/loc/[lat],[lon],[r] ==&gt;     bulletins     ; The bulletins generated within r km of (lat, lon)
+/range               ==&gt;     records       ; All of the records between ?before and ?after.
 
 Available Query parameters
 
@@ -149,7 +149,7 @@ Aggregates
 /pop-tags          ==&gt;      tags          ; The most popular tags within T of now.
 /most-endo         ==&gt;      bulletins     ; The most endorsed bulletins within T
 /dense-locs        ==&gt;      locations     ; The most active locations within T
-/dense-areas       ==&gt;      records       ; The densest areas of the graph within T
+/dense-vertices    ==&gt;      records       ; The densest areas of the graph within T
 /new               ==&gt;      records       ; New records in the public record.
 
 Available Query Parameters
@@ -160,8 +160,8 @@ Available Query Parameters
 
 Information
 
-/status            ==&gt;      See section 5.4
-/config            ==&gt;      See section 5.4
+/status            ==&gt;     object       ; See section 5.4
+/config            ==&gt;     object       ; See section 5.4
 </code></pre>
 <h3>5.1 Individual Routes</h3>
 <p>For queries that request single elements the schema is straight forward.</p>
@@ -189,11 +189,17 @@ That field is the list of endorsements for that bulletin.</p>
     ]
 }
 </code></pre>
+<p><code>/block/[hash]</code> returns all of the records with a block.</p>
+<pre><code>{
+    bltns: bulletins,
+    endos: endorsements
+}
+</code></pre>
 <h3>5.2 Paginated Routes</h3>
-<p>For requests that can return many records, if the limit param is not specified or is higher than the server's MAX_RETURN field then the server will paginate the list of results
+<p>For requests that can return many records, if the limit param is not specified or is higher than the server's MAX_RETURN field then the server will paginate the list of results.
 Pagination is based on two things, the number of records that could be returned by the query and the blocks which the records are in.
-A paginated query will return all records within consecutive blocks where the number of records returned does not exceed the max number of records it is allowed to return. </p>
-<p>This means that if records in blocks are arranged like in the example below and a query asks for all of the records, then only records in the first 3 blocks are returned. (If the limit is set to 20.)</p>
+A paginated query will return all records within consecutive blocks where the number of records returned does not exceed the max number of records the server is allowed to return. </p>
+<p>This means that if records in blocks are arranged like in the example below and a query asks for all of the records, then only records in the first 3 blocks are returned -- if the limit is set to 20.</p>
 <pre><code>query is /new?limit=20
 
 blocks:       a320f &lt;--- b79de &lt;--- c3421 &lt;--- d3725 &lt;--- e2934
@@ -201,29 +207,29 @@ Num records:   15         73         4          7          9
 </code></pre>
 <p>The response then looks like this:</p>
 <pre><code>{
+    stop: "c3421",
+    start: "e2934"
     records: [ { txid: "d932e..." ...},
                { txid: "b3f1a..." ...},
                { txid: "f3f65..." ...},
                ...
              ],
 
-    stop: "c3421",
-    start: "e2934"
 }
 </code></pre>
 <p>It may be suprising to see, but if the client responds with another query asking for the new records before block <code>c3421</code> the number of results will exceed the user set 'limit'. 
-This is because the API servers will return all results in a block if they must return some even if it means violating the user set limit.
-This is done to keep the api queries simple, not to be maniacal.</p>
+This is because an API server will return <strong>all</strong> of the results in a block if it must return some <strong>even if</strong> it means violating the MAX_RETURN limit.
+This is done to keep the API queries simple, not to be maniacal.</p>
 <pre><code>query is /new?before=c3421&amp;limit=5
 
 {
+    stop:  "b79d4",
+    start: "b79d4"
     records: [ { txid: "4832d..." ...}
                { txid: "b422e..." ...}    
                { txid: "g3943..." ...}
                ... // And 69 more
         ],
-    stop:  "b79d4",
-    start: "b79d4"
 }
 </code></pre>
 <h3>5.3 Aggregated Routes</h3>
@@ -249,6 +255,7 @@ The JSON fields are documented below.</p>
     apiVersion:   [semantic-version]    ; The API's version
     btcdVersion:  [semantic-version]    ; The trusted node's version
     hs-addr:      [hidden-service-addr] ; Optional TOR HS address
+    maxReturn:    [int]                 ; The max num of records the server will return.
 }
 </code></pre>
 <p>Example: </p>
@@ -279,9 +286,17 @@ The JSON fields are documented below.</p>
 <p>A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.
 <code>ombfullnode</code> is a modified full node implementation of Bitcoin, while <code>ombwebapi</code> serves the JSON API over https. 
 This means that a single server must meet the minimum requirements to run a Bitcoin full node <em>and</em> fulfill requests from SSV nodes.</p>
-<h3>6.1 Minimum Requirements</h3>
 <p>Be aware that this is not the recommended setup and it makes more sense to use two different machines. 
 This way one machine can communicate solely with the Bitcoin network and build the public record and the other machine can respond to SSV nodes.</p>
+<h3>6.1 Minimum Requirements</h3>
+<p>A server will generally not be able to support the application if it does not have at least:</p>
+<ul>
+<li>1 GB of Ram.</li>
+<li>4 2.5Ghz CPUs.</li>
+<li>250 GB of disk storage.</li>
+<li>30 GB per month of IO out.</li>
+<li>A 200 Mbits connection to the broader internet.</li>
+</ul>
 <h3>6.2 Deployment Process</h3>
 <p>There are two ways to set up a deployment of an API server. 
 The first only requires the application binaries and a connection to the Bitcoin network.
@@ -293,9 +308,11 @@ That bundle of bootstrap data will be released with new versions of the software
 The process is decribed further in <a href="">section 7.2</a>.</p>
 <h3>6.3 Protecting Users</h3>
 <p>An API server operating in good faith should do all of the following things:</p>
-<p><code>Do not keep server logs.</code></p>
-<p><code>Setup a tor hidden service</code></p>
-<p><code>Use proper public key authentication for software updates and HTTPS</code></p>
+<ul>
+<li>Do not keep server logs.</li>
+<li>Setup a tor hidden service</li>
+<li>Use proper public key authentication for software updates and HTTPS</li>
+</ul>
         
         
         

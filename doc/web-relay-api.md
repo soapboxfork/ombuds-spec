@@ -35,7 +35,9 @@ Nick -- Oct 2015
     
 ## 1. Definitions
 
-Throughout this document the pronoun "we" is occasionally used. "We" in this context means Alex Kuck and Nick Skelsey.
+Throughout this document the pronoun `we` is occasionally used. "We" in this context means Alex Kuck and Nick Skelsey.
+A `web relay` is the noun used to describe a single deployment of the API described below.
+It does not nessecarily refer to a single API server, but it can be conceptually thought of as one machine reachable from the rest of the Internet.
 
 
 ## 2. Introduction
@@ -178,7 +180,7 @@ The response then looks like this:
     }
 
 It may be suprising to see, but if the client responds with another query asking for the new records before block `c3421` the number of results will exceed the user set 'limit'. 
-This is because an API server will return **all** of the results in a block if it must return some **even if** it means violating the MAX_RETURN limit.
+This is because a web relay will return **all** of the results in a block if it must return some **even if** it means violating the MAX_RETURN limit.
 This is done to keep the API queries simple, not to be maniacal.
     
     query is /new?before=c3421&limit=5
@@ -212,7 +214,7 @@ The schema looks like this:
 
 ### 5.4 Informational Routes
 
-The last section of API methods provides information about the API server itself.
+The last section of API methods provides information about the web relay itself.
 These routes should be used by clients to determine if the API supports their version and use case.
 The JSON fields are documented below.
 
@@ -235,7 +237,7 @@ Example:
         "hs-addr":     "493092esdfaefa.onion"
     }
 
-`/status` returns the status of the API server.
+`/status` returns the status of the web relay.
 
 Schema:
 
@@ -260,7 +262,7 @@ Example:
 
 ## 6. Physical Deployment
 
-A properly functioning API server will have to run two binaries: ombfullnode and ombwebapi.
+A properly functioning web relay will have to run two binaries: ombfullnode and ombwebapi.
 `ombfullnode` is a modified full node implementation of Bitcoin, while `ombwebapi` serves the JSON API over https. 
 This means that a single server must meet the minimum requirements to run a Bitcoin full node _and_ fulfill requests from SSV nodes.
 
@@ -279,7 +281,7 @@ A server will generally not be able to support the application if it does not ha
 
 ### 6.2 Deployment Process
 
-There are two ways to set up a deployment of an API server. 
+There are two ways to set up a deployment of a web relay. 
 The first only requires the application binaries and a connection to the Bitcoin network.
 This requires a full download and validation of the bitcoin block chain and the construction of a public record from it.
 
@@ -291,11 +293,9 @@ The process is decribed further in [section 7.2]().
 
 ### 6.3 Protecting Users
 
-An API server operating in good faith should do all of the following things:
+A web relay operating in good faith should do all of the following things:
 
-`Do not keep server logs.`
-
-`Setup a tor hidden service`
-
-`Use proper public key authentication for software updates and HTTPS`
+- Do not keep server logs.
+- Setup a tor hidden service
+- Use proper public key authentication for software updates and HTTPS
 

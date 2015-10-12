@@ -11,6 +11,14 @@ What follows below is the criterea for what you can expect from a document label
 ### Draft
 Nothing in a draft is final or an official decision or spell checked. 
 A draft represents a rough take on a specific design and should not be relied upon.
+The status line that documents will carry follows below.
+
+    While this is not an RFC, the intention behind this document is to describe the system completely so that it is reproducible and well understood.
+    Please note this is a **draft of a design** that is subject to change. 
+    Do not rely the content of this document for any important decisions.
+    It has not been reviewed.
+    
+    [Author] -- [Month Year]
 
 ### Revision
 A revision is a work in progress that has been reviewed at least once by someone other than the original author.
