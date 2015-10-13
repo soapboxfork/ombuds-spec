@@ -1,10 +1,42 @@
 <!-- title: Public Record -->
 
-Overview
-========
+The public record is the Ombuds project. Within  conversations The public record is that space. (make references to research paper.
+
+# Definition
+The public record is comprised of all [bulletins](bulletin) and [endorsements](endorsement) within the longest valid block chain. 
+Only records that have more than six confirmations are committed to the public record. 
+
+# Background
+*This section briefly describes a bitcoin full node and the longest valid block chain to provide context for the public record.*
+
+A bitcoin full node is a computer running . Every full node “download[s] every block and transaction and check[s] them against Bitcoin's core consensus rules” (https://en.bitcoin.it/wiki/Full_node). Each block has a reference to a previous block, and together, these many references between blocks form the block chain.
+
+To operate faithfully and maintain , a bitcoin full node must:
+- maintain an honest connection to the bitcoin network [to ensure it receives all data broadcast]
+- possess a copy of the consensus rules [to validate the data it receives]
+
+Key among the consensus rules is the “proof-of-work”. 
+
+Thus, all full nodes receive the same data, validates them against the same consensus rules, and advertises . These combined factors result in every bitcoin full node maintaining the exact same longest valid block chain.
+
+# Derivation from a block chain
+A public record is derived entirely from a block chain. As a subset, the public record inherits the the guarantees a block chain provides, namely the aforementioned redundancy and data integrity.
+*maybe have a list of guarantees hear that correspond to Habermas’ public sphere qualities*
+
+# Implication
+The Ombuds project translates these guarantees to written speech. Authors are, effectively, guaranteed their writing will never be modified or deleted. Together these voices within the public record can serve as a social history and provide a space for honest and independent thinking. Such a concept is akin to Jurgen Habermas
+
+# Forgotten or Orphaned Records
+Once a record is contained within the block chain and five valid blocks follow, the record is considered securely within the public record. However, 
+
+Bulletins and endorsements that were not included in a block
+Bulletins and endorsements that were orphaned
+
+# Versioning
+The Ombuds protocol was purposefully designed with simplicity: authors create bulletins and authors endorse bulletins. 
 
 
-
+# more
 
 
 Eventually Consistent
