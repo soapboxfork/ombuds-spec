@@ -37,7 +37,7 @@ Nick -- Oct 2015
 
 Throughout this document the pronoun `we` is occasionally used. "We" in this context means Alex Kuck and Nick Skelsey.
 A `web relay` is the noun used to describe a single deployment of the API described below.
-It does not nessecarily refer to a single API server, but it can be conceptually thought of as one machine reachable from the rest of the Internet.
+It does not nessecarily refer to a single physical machine, but it can be conceptually thought of as one IP address that is reachable from the rest of the Internet.
 
 
 ## 2. Introduction
