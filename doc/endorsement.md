@@ -30,6 +30,15 @@ Webster's dictionary gives us three definitions of the word 'endorsement'.
 
 All of the definitions or none of them can apply to an endoresment stored in the public record.
 
+Status of This Document
+-----------------------
+While this is not an RFC, the intention behind this document is to describe the system completely so that it is reproducible and well understood.
+Please note this is a **draft of a design** that is subject to change. 
+Do not rely the content of this document for any important decisions.
+It has not been reviewed.
+
+Nick -- Oct 2015
+
 Contents
 ========
 1. Wire Protocol Schema
