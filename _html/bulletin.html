@@ -68,39 +68,43 @@
         
         <!-- title: Bulletins Def -->
 
-<h2>Bulletin Specification // DRAFT</h2>
-<h1>Overview</h1>
-<p>Occasionally the term when talking about Ombuds the term public statement is used. 
-Nine times out of ten, the speaker is referring to a bulletin stored in the public record.</p>
-<p>A bulletin is the name for a statement containing text, a timestamp, and optionally a location.
-A bulletin's author is attributed to a public key according to <a href="author#2.7">section of 2.7 of DD03</a>.</p>
-<p>For a bulletin to be considered part of the public record it must be included in Bitcoin's block chain.
-See section 5.1 of the thesis for a further discussion on the security implications of the previous statement.</p>
-<p>What follows below is a description of the formats bulletins can be in.</p>
-<h1>Contents</h1>
+<h1>DD03 Bulletin Specification // DRAFT</h1>
+<h2>Overview</h2>
+<p>A bulletin is the name for a public statement - generically called a record - containing a text message, a timestamp, and optionally a location.
+A bulletin's author is attributed to a public key according to <a href="author">DD02</a>.
+For a bulletin to be considered part of the public record it must be included in Bitcoin's block chain.
+The contents below describe the valid formats a bulletin can take.</p>
+<h2>Status of this Document</h2>
+<p>This document has been reviewed by the author.
+It's contents have not been implemented and it lacks concrete types.
+This will be rememdied.</p>
+<p>Nick -- Oct 29, 2015</p>
+<h2>Contents</h2>
 <ol>
 <li>Wire Protocol Schema</li>
 <li>Public Record Schema</li>
 <li>JSON Schema</li>
 </ol>
-<h1>Wire Protocol Schema</h1>
+<h2>Wire Protocol Schema</h2>
 <p>A bulletin is defined as a Bitcoin transaction that contains the following protocol buffer in a series of data carrying outputs.
 A bulletin can either be encoded in a bitcoin in several ways. 
-A parser will look for the message in various encoding formats as described in <a href="DD01">section 2.7.3 Encoding Formats of DD01</a>.</p>
-<pre><code>message WireBulletin {
-    required string message     = 1;
-    required int64 timestamp    = 2; // Seconds since 00:00:00 Jan 1, 1970
-    optional location           = 3;
-}
+A parser will look for the message in various encoding formats as described in <a href="public-record">Encoded Message Formats of DD01</a>.</p>
+<pre><code> message WireBulletin {
+         required string message     = 1;
+         required uint64 timestamp   = 2; // Seconds since 00:00:00 Jan 1, 1970
+         optional Location location  = 3;
+ }
 
-message location {
-    required lat                = 1;
-    required lon                = 2;
-}
+ // A single WGS84 Datum
+ message Location {
+         required double lat          = 1;
+         required double lon          = 2;
+         required double h            = 3;
+ }
 </code></pre>
-<h1>Public Record Schema</h1>
+<h2>Public Record Schema</h2>
 <p>The SQl schema for a bulletin can be found at its <a href="https://github.com/soapboxsys/ombudslib/blob/master/protocol/schema.sql">source</a>.</p>
-<h1>JSON Schema</h1>
+<h2>JSON Schema</h2>
 <p>The fields of a bulletin encoded in JSON is fully specified in <a href="https://github.com/soapboxsys/ombudslib/blob/master/ombjson/responses.go">bulletin.go</a></p>
         
         

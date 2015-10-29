@@ -15,7 +15,8 @@ The status line that documents will carry follows below.
 
     While this is not an RFC, the intention behind this document is to describe the system completely so that it is reproducible and well understood.
     Please note this is a **draft of a design** that is subject to change. 
-    Do not rely the content of this document for any important decisions.
+    Do not rely the content of this document for critical decisions. 
+    Information contained within may be inaccurate.
     It has not been reviewed.
     
     [Author] -- [Month Year]
