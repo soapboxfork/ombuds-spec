@@ -19,6 +19,9 @@ Protocol Definitions
 [Endorsement](/endorsement)
 :   A record signalling one's approval of some bulletin.
 
+[Record Encoding Formats](/record-encoding-formats)
+:   The accepted formats for encoding a record within a Bitcoin transaction.
+
 System Design
 -------------
 
