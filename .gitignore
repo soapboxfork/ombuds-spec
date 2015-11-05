@@ -1,1 +1,3 @@
 .tmp
+*.swp
+build-loop.sh
