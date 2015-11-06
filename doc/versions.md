@@ -31,5 +31,8 @@ A document that is implemented is running in live code.
 This document can be understood as the intended functionality of the system.
 Any aspects of the system that do not conform to an implemented design doc are failures in the implementation.
 Like Revisions implementation documents can be versioned in numerically increasing order.
-An implemented document will carry a **Status of this Document** section that is written by the author of the code.
+An implemented document will carry: 
+
+- a **Status of this Document** section that is written by the author of the code.
+- a link to a tagged release of the code that implements the document.
 
