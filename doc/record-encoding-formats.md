@@ -40,9 +40,9 @@ This article assumes:
 
 Criteria
 --------
-To assess each encoding format, three criterea are used:
+To assess each encoding format, three criterion are used:
 
-- The likelyhood a record will be included in a block.
+The likelyhood a record will be included in a block.
 :   When records are stored at a sufficient depth in the block chain, these records are considered
     "public" meaning they are almost impossible to censor.
     As a derivative of the block chain, the public record is comprised of the records within mined blocks.
@@ -50,7 +50,7 @@ To assess each encoding format, three criterea are used:
     When considering each encoding format, the likelyhood of block inclusion this is really the top priority.
 
 The cost of storing a record.
-:   To broadcast any record, an author must spend bitcoin, while it is a small amount the amount required is a non-negligible amount. 
+:   To broadcast any record, an author must spend bitcoin; while this cost is small, it is a non-negligible amount. 
     In Ombuds speech is not free in terms of cost, but it is free in terms of content.
 
 The prunability of a record.
