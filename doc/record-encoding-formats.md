@@ -47,7 +47,7 @@ The likelyhood a record will be included in a block.
     "public" meaning they are almost impossible to censor.
     As a derivative of the block chain, the public record is comprised of the records within mined blocks.
     It is __extremly important__ that records are selected by miner's for inclusion within their blocks.
-    When considering each encoding format, the likelyhood of block inclusion this is really the top priority.
+    When considering each encoding format, the likelyhood of block inclusion is the top priority.
 
 The cost of storing a record.
 :   To broadcast any record, an author must spend bitcoin; while this cost is small, it is a non-negligible amount. 
