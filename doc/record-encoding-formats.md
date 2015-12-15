@@ -96,7 +96,7 @@ The Record Length describes the byte length of the subsequent serialized wirerec
 It is encoded using Satoshi's variable-length unsigned integer standard, known as [CompactSize](https://bitcoin.org/en/glossary/compactsize).
 See [btcsuite](https://github.com/btcsuite/btcd/blob/master/wire/common.go#L391-L418) or [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/VarInt.java) for reference implementations.
 
-The Record Length can be no larger than 75,000, the maximum size of an Ombuds Record.
+The Record Length can be no larger than 75,000 kilobytes, the maximum size of an Ombuds Record.
 If the Record Length does not correspond to actual size of the subsequent wirerecord, the record is invalid.
 
     Record Length
