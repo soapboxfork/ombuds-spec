@@ -75,11 +75,9 @@ Only the encoding formats defined in this article are recognized as valid ways t
 Each format has an introduction date and is not a valid encoding format before that date.
 New encoding formats will likely be introduced.</p>
 <h2>Status of this Document</h2>
-<p>Encoding formats have not been finalized. 
-Encoding examples are not inline with new Ombuds Header definition.
-We must determine if we want wirecord length encoded.
+<p>Encoding examples are not up to date and contain inaccurate information.
 The introduction date of the encoding formats will be the relase date of the Ombuds specification.</p>
-<p>Alex, Nick -- Nov 3, 2015</p>
+<p>Alex, Nick -- Dec 15, 2015</p>
 <h2>Contents</h2>
 <ol>
 <li>Assumptions </li>
@@ -180,12 +178,12 @@ Records encoded in this way will for the most part "blend in."</dd>
 This is not good for the health of Bitcoin and will probably change.</dd>
 </dl>
 <p><em>Example:</em></p>
-<pre><code>***HELP ME I AM WRONG****
-JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-BRETHREN   : 425245544852454E   
-wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
------------------------------------------------------
+<pre><code>JSON            : {"message":"Hello, world!","timestamp":12345678}
+Header          : 4f 4d 42 55 44 53 01 14
+Wirerecord      : 0a 0d 48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 21 10 ce c2 f1 05
+------------------------------------------------------
 
+*** Below this line is broken ***
 TX OUTPUT (record encoded)
 index  : 0
 value  : 567 (dust)
@@ -243,12 +241,12 @@ That might change in the future.</dd>
 <dd>OP_RETURN outputs where designed to be pruned from the regular ledger.</dd>
 </dl>
 <p><em>Example:</em></p>
-<pre><code>***HELP ME I AM WRONG*** 
-JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-BRETHREN   : 425245544852454E
-wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
+<pre><code>JSON            : {"message":"Hello, world!","timestamp":12345678}
+Header          : 4f 4d 42 55 44 53 01 14
+Wirerecord      : 0a 0d 48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 21 10 ce c2 f1 05
 -----------------------------------------------------
 
+*** Below this line is broken ***
 TX OUTPUT (record encoded)
 index  : 0
 value  : 0

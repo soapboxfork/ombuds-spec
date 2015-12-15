@@ -14,12 +14,10 @@ New encoding formats will likely be introduced.
 Status of this Document
 -----------------------
 
-Encoding formats have not been finalized. 
-Encoding examples are not inline with new Ombuds Header definition.
-We must determine if we want wirecord length encoded.
+Encoding examples are not up to date and contain inaccurate information.
 The introduction date of the encoding formats will be the relase date of the Ombuds specification.
 
-Alex, Nick -- Nov 3, 2015
+Alex, Nick -- Dec 15, 2015
 
 
 Contents
@@ -147,12 +145,12 @@ The last transaction output will contain zeros following the serialized wirereco
 
 *Example:*
     
-    ***HELP ME I AM WRONG****
-    JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-    BRETHREN   : 425245544852454E   
-    wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
-    -----------------------------------------------------
+    JSON            : {"message":"Hello, world!","timestamp":12345678}
+    Header          : 4f 4d 42 55 44 53 01 14
+    Wirerecord      : 0a 0d 48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 21 10 ce c2 f1 05
+    ------------------------------------------------------
 
+    *** Below this line is broken ***
     TX OUTPUT (record encoded)
     index  : 0
     value  : 567 (dust)
@@ -210,12 +208,12 @@ The last transaction output will contain zeros following the serialized wirereco
 
 *Example:*
 
-    ***HELP ME I AM WRONG*** 
-    JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-    BRETHREN   : 425245544852454E
-    wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
+    JSON            : {"message":"Hello, world!","timestamp":12345678}
+    Header          : 4f 4d 42 55 44 53 01 14
+    Wirerecord      : 0a 0d 48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 21 10 ce c2 f1 05
     -----------------------------------------------------
 
+    *** Below this line is broken ***
     TX OUTPUT (record encoded)
     index  : 0
     value  : 0
