@@ -78,7 +78,7 @@ The Record Flag is the serialized UTF-8 encoded string `"OMBUDS"`.
 
     Record Flag
     UTF-8 string : OMBUDS
-    byte array   : [0x4f, 0x4d, 0x42, 0x55, 0x44, 0x52, 0x53]
+    byte array   : [0x4f, 0x4d, 0x42, 0x55, 0x44, 0x53]
 
 
 Record Type
@@ -97,7 +97,7 @@ It is encoded using Satoshi's variable-length unsigned integer standard, known a
 See [btcsuite](https://github.com/btcsuite/btcd/blob/master/wire/common.go#L391-L418) or [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/VarInt.java) for reference implementations.
 
 The Record Length can be no larger than 75,000 kilobytes, the maximum size of an Ombuds Record.
-If the Record Length does not correspond to actual size of the subsequent wirerecord, the record is invalid.
+If the Record Length does not correspond to the actual size of the subsequent wirerecord, the record is invalid.
 
     Record Length
     byte array : [0x??] through [0x124F8] , inclusive of end values.
