@@ -76,7 +76,7 @@ Each format has an introduction date and is not a valid encoding format before t
 New encoding formats will likely be introduced.</p>
 <h2>Status of this Document</h2>
 <p>Encoding formats have not been finalized. 
-Encoding examples must be fleshed out.
+Encoding examples are not inline with new Ombuds Header definition.
 We must determine if we want wirecord length encoded.
 The introduction date of the encoding formats will be the relase date of the Ombuds specification.</p>
 <p>Alex, Nick -- Nov 3, 2015</p>
@@ -84,7 +84,7 @@ The introduction date of the encoding formats will be the relase date of the Omb
 <ol>
 <li>Assumptions </li>
 <li>Criteria</li>
-<li>Ombuds Identifier</li>
+<li>Ombuds Header</li>
 <li>Formats</li>
 </ol>
 <h2>Assumptions</h2>
@@ -94,9 +94,7 @@ The introduction date of the encoding formats will be the relase date of the Omb
 <li>the Bitcoin transaction inputs are controlled by the sender and hold enough coin to fund the new transaction.</li>
 </ul>
 <h2>Criteria</h2>
-<p>To assess each encoding format, three criterea are used:</p>
-<ul>
-<li>
+<p>To assess each encoding format, three criterion are used:</p>
 <dl>
 <dt>The likelyhood a record will be included in a block.</dt>
 <dd>When records are stored at a sufficient depth in the block chain, these records are considered
@@ -104,24 +102,44 @@ The introduction date of the encoding formats will be the relase date of the Omb
 As a derivative of the block chain, the public record is comprised of the records within mined blocks.
 It is <strong>extremly important</strong> that records are selected by miner's for inclusion within their blocks.
 When considering each encoding format, the likelyhood of block inclusion this is really the top priority.</dd>
-</dl>
-</li>
-</ul>
-<dl>
 <dt>The cost of storing a record.</dt>
-<dd>To broadcast any record, an author must spend bitcoin, while it is a small amount the amount required is a non-negligible amount. 
+<dd>To broadcast any record, an author must spend bitcoin; while this cost is small, it is a non-negligible amount. 
 In Ombuds speech is not free in terms of cost, but it is free in terms of content.</dd>
 <dt>The prunability of a record.</dt>
 <dd>A growing bitcoin network provides Ombuds with a reliable and secure data store.
 If the network is a distrbuted, sustainbale entity, the long-term viability of dependent systems is possible.
 The impact an encoding format has on the network and block chain sustainability is thus crucial.</dd>
 </dl>
-<h2>Ombuds Identifier</h2>
-<p>In every encoding format, the serialized Ombuds identifier <code>"BRETHREN"</code> must precede the serialized wirerecord.
-The UTF-8 encoded string indicates an Ombuds record follows.</p>
-<pre><code>Ombuds Identifier
-UTF-8 string : BRETHREN
-byte array   : [0x42, 0x52, 0x45, 0x54, 0x48, 0x52, 0x45, 0x4e]
+<h1>Ombuds Header</h1>
+<p>The Ombuds Header indicates the presence, the type, and the length of an Ombuds Record. In every encoding format, the header must precede the serialized wirerecord.</p>
+<pre><code>Ombuds Header
+6 byte : Record Flag 
+1 byte : Record Type
+varint : Record Length
+       +
+Ombuds Record
+&lt; 75KB : [serialized wirerecord]
+</code></pre>
+<h2>Record Flag</h2>
+<p>The Record Flag is the serialized UTF-8 encoded string <code>"OMBUDS"</code>.</p>
+<pre><code>Record Flag
+UTF-8 string : OMBUDS
+byte array   : [0x4f, 0x4d, 0x42, 0x55, 0x44, 0x52, 0x53]
+</code></pre>
+<h2>Record Type</h2>
+<p>The Record Type is either <code>1</code> for a bulletin or <code>2</code> for an endorsement. 
+The record is invalid if this type does not correspond to the serialized wirerecord type.</p>
+<pre><code>Record Type
+byte : 0x01 or 0x02
+</code></pre>
+<h2>Record Length</h2>
+<p>The Record Length describes the byte length of the subsequent serialized wirerecord. 
+It is encoded using Satoshi's variable-length unsigned integer standard, known as <a href="https://bitcoin.org/en/glossary/compactsize">CompactSize</a>.
+See <a href="https://github.com/btcsuite/btcd/blob/master/wire/common.go#L391-L418">btcsuite</a> or <a href="https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/VarInt.java">bitcoinj</a> for reference implementations.</p>
+<p>The Record Length can be no larger than 75,000, the maximum size of an Ombuds Record.
+If the Record Length does not correspond to actual size of the subsequent wirerecord, the record is invalid.</p>
+<pre><code>Record Length
+byte array : [0x??] through [0x124F8] , inclusive of end values.
 </code></pre>
 <h1>Formats</h1>
 <h2>Value</h2>
@@ -137,10 +155,10 @@ Block hash : 00000000000000cf6044ece29281718edad566543bb29f56889625481071f303
 <ul>
 <li>
 <p>Encoding:
-The combined data (serialized Ombuds identifier + serialized wirerecord) can be divided into 20-byte chunks and placed within sequential transaction output scripts.
+The combined data (Ombuds Header + serialized wirerecord) can be divided into 20-byte chunks and placed within sequential transaction output scripts.
 Each chunk of data will reside where the <code>PubKeyHash</code> normally lives.
 The first transaction output (index 0) must contain the first chunk of data. 
-In other words, transaction output with index zero will hold the eight byte <code>"BRETHREN"</code> identifier followed by the first 12 bytes of the serialized wirerecord.
+In other words, transaction output with index zero will hold the Ombuds Header followed by the first 12 bytes of the serialized wirerecord.
 The last transaction output will contain zeros following the serialized wirerecord.</p>
 </li>
 <li>
@@ -162,8 +180,9 @@ Records encoded in this way will for the most part "blend in."</dd>
 This is not good for the health of Bitcoin and will probably change.</dd>
 </dl>
 <p><em>Example:</em></p>
-<pre><code>JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-BRETHREN   : 425245544852454E
+<pre><code>***HELP ME I AM WRONG****
+JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
+BRETHREN   : 425245544852454E   
 wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
 -----------------------------------------------------
 
@@ -208,7 +227,7 @@ Block hash : 00000000000000cf6044ece29281718edad566543bb29f56889625481071f303
 </code></pre>
 <ul>
 <li>
-<p>Encoding: When the combined data (serialized Ombuds identifier + serialized wirerecord) is less than 80 bytes in size, it can be encoded entirely within a null script. To produce this script: add OP_RETURN, add size of data, add combined data.</p>
+<p>Encoding: When the combined data (Ombuds Header + serialized wirerecord) is less than 80 bytes in size, it can be encoded entirely within a null script. To produce this script: add OP_RETURN, add size of data, add combined data.</p>
 </li>
 <li>
 <p>Constraints: The entire encoded payload must be less than 80 bytes.</p>
@@ -224,7 +243,8 @@ That might change in the future.</dd>
 <dd>OP_RETURN outputs where designed to be pruned from the regular ledger.</dd>
 </dl>
 <p><em>Example:</em></p>
-<pre><code>JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
+<pre><code>***HELP ME I AM WRONG*** 
+JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
 BRETHREN   : 425245544852454E
 wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
 -----------------------------------------------------

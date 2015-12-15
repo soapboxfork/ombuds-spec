@@ -15,7 +15,7 @@ Status of this Document
 -----------------------
 
 Encoding formats have not been finalized. 
-Encoding examples must be fleshed out.
+Encoding examples are not inline with new Ombuds Header definition.
 We must determine if we want wirecord length encoded.
 The introduction date of the encoding formats will be the relase date of the Ombuds specification.
 
@@ -26,7 +26,7 @@ Contents
 --------
 1. Assumptions 
 2. Criteria
-3. Ombuds Identifier
+3. Ombuds Header
 3. Formats
 
 
@@ -59,15 +59,50 @@ The prunability of a record.
     The impact an encoding format has on the network and block chain sustainability is thus crucial.
 
 
-Ombuds Identifier
------------------
-In every encoding format, the serialized Ombuds identifier `"BRETHREN"` must precede the serialized wirerecord.
-The UTF-8 encoded string indicates an Ombuds record follows.
+Ombuds Header
+=============
+The Ombuds Header indicates the presence, the type, and the length of an Ombuds Record. In every encoding format, the header must precede the serialized wirerecord.
 
-    Ombuds Identifier
-    UTF-8 string : BRETHREN
-    byte array   : [0x42, 0x52, 0x45, 0x54, 0x48, 0x52, 0x45, 0x4e]
+    Ombuds Header
+    6 byte : Record Flag 
+    1 byte : Record Type
+    varint : Record Length
+           +
+    Ombuds Record
+    < 75KB : [serialized wirerecord]
+
+
+Record Flag
+-----------
+The Record Flag is the serialized UTF-8 encoded string `"OMBUDS"`.
+
+    Record Flag
+    UTF-8 string : OMBUDS
+    byte array   : [0x4f, 0x4d, 0x42, 0x55, 0x44, 0x52, 0x53]
+
+
+Record Type
+-----------
+The Record Type is either `1` for a bulletin or `2` for an endorsement. 
+The record is invalid if this type does not correspond to the serialized wirerecord type.
+
+    Record Type
+    byte : 0x01 or 0x02
+     
+
+Record Length
+-------------
+The Record Length describes the byte length of the subsequent serialized wirerecord. 
+It is encoded using Satoshi's variable-length unsigned integer standard, known as [CompactSize](https://bitcoin.org/en/glossary/compactsize).
+See [btcsuite](https://github.com/btcsuite/btcd/blob/master/wire/common.go#L391-L418) or [bitcoinj](https://github.com/bitcoinj/bitcoinj/blob/master/core/src/main/java/org/bitcoinj/core/VarInt.java) for reference implementations.
+
+The Record Length can be no larger than 75,000, the maximum size of an Ombuds Record.
+If the Record Length does not correspond to actual size of the subsequent wirerecord, the record is invalid.
+
+    Record Length
+    byte array : [0x??] through [0x124F8] , inclusive of end values.
     
+
 
 Formats
 =======
@@ -88,10 +123,10 @@ Scripts
     Block hash : 00000000000000cf6044ece29281718edad566543bb29f56889625481071f303 
 
 * Encoding:
-The combined data (serialized Ombuds identifier + serialized wirerecord) can be divided into 20-byte chunks and placed within sequential transaction output scripts.
+The combined data (Ombuds Header + serialized wirerecord) can be divided into 20-byte chunks and placed within sequential transaction output scripts.
 Each chunk of data will reside where the `PubKeyHash` normally lives.
 The first transaction output (index 0) must contain the first chunk of data. 
-In other words, transaction output with index zero will hold the eight byte `"BRETHREN"` identifier followed by the first 12 bytes of the serialized wirerecord.
+In other words, transaction output with index zero will hold the Ombuds Header followed by the first 12 bytes of the serialized wirerecord.
 The last transaction output will contain zeros following the serialized wirerecord.
 
 * Constraints
@@ -112,8 +147,9 @@ The last transaction output will contain zeros following the serialized wirereco
 
 *Example:*
     
+    ***HELP ME I AM WRONG****
     JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
-    BRETHREN   : 425245544852454E
+    BRETHREN   : 425245544852454E   
     wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
     -----------------------------------------------------
 
@@ -158,7 +194,7 @@ The last transaction output will contain zeros following the serialized wirereco
     Block #    : XXXXXX
     Block hash : 00000000000000cf6044ece29281718edad566543bb29f56889625481071f303 
 
-* Encoding: When the combined data (serialized Ombuds identifier + serialized wirerecord) is less than 80 bytes in size, it can be encoded entirely within a null script. To produce this script: add OP_RETURN, add size of data, add combined data.
+* Encoding: When the combined data (Ombuds Header + serialized wirerecord) is less than 80 bytes in size, it can be encoded entirely within a null script. To produce this script: add OP_RETURN, add size of data, add combined data.
 
 * Constraints: The entire encoded payload must be less than 80 bytes.
 
@@ -174,6 +210,7 @@ The last transaction output will contain zeros following the serialized wirereco
 
 *Example:*
 
+    ***HELP ME I AM WRONG*** 
     JSON       : { 'message': 'Hello world!', 'timestamp': 12345678}
     BRETHREN   : 425245544852454E
     wirerecord : 0a0c48656c6c6f20776f726c642110abc3e8b105
