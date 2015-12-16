@@ -43,4 +43,7 @@ Meta
 ----
 
 [How this Spec is Versioned](/versions)
-:   Each document in this specification is governed by a review process
+:   Each document in this specification is governed by a review process.
+
+[Test Data](/test-data)
+:   An assortment of hand crafted test cases of valid and invalid records.
